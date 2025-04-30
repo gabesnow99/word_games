@@ -69,12 +69,33 @@ class WordListManipulator():
     def remove_words_without_letter(self, l):
         self.selected_words = [word for word in self.selected_words if l in word]
 
+    '''
+    --------------------------------------------------------------------------------
+    returns words from self.selected_words that include the selected letter
+    --------------------------------------------------------------------------------
+    inputs:
+    - l: selected letter
+    --------------------------------------------------------------------------------
+    '''
     def get_words_with_letter(self, l):
         return [word for word in self.selected_words if l in word]
 
+    '''
+    --------------------------------------------------------------------------------
+    returns the number of unique letters in a string
+    --------------------------------------------------------------------------------
+    inputs:
+    - word: selected string
+    --------------------------------------------------------------------------------
+    '''
     def count_unique_letters(self, word):
         return len(set(word))
 
+    '''
+    --------------------------------------------------------------------------------
+    sorts self.selected_words by the number of unique letter, from low to high
+    --------------------------------------------------------------------------------
+    '''
     def sort_by_unique_letters(self):
         self.selected_words = sorted(self.selected_words, key=lambda word: self.count_unique_letters(word))
 
@@ -87,7 +108,9 @@ class WordListManipulator():
         return self.selected_words.copy()
 
     '''
-    returns the selected_words member to the full set
+    --------------------------------------------------------------------------------
+    returns the selected_words member to include the full set
+    --------------------------------------------------------------------------------
     '''
     def start_over(self):
         self.selected_words = self.words.copy()
@@ -158,25 +181,55 @@ class LetterBoxer(WordListManipulator):
         self.words = self.selected_words.copy()
         self.check_for_pair_completion()
 
+    '''
+    --------------------------------------------------------------------------------
+    checks for two-word pairs that complete the puzzle, beginning with the words
+    with the most unique letters
+    --------------------------------------------------------------------------------
+    '''
     def check_for_pair_completion(self):
         for big_word in reversed(self.words):
             lefts = self.get_words_ending_with_letter(big_word[0])
             for left in lefts:
                 if self.count_unique_letters(left + big_word) == 12:
                     print(left + " " + big_word)
-                    return
+                    return # comment out to print all two-word combinations
             rights = self.get_words_beginning_with_letter(big_word[-1])
             for right in rights:
                 if self.count_unique_letters(big_word + right) == 12:
                     print(big_word + " " + right)
-                    return
+                    return # comment out to print all two-word combinations
 
+    '''
+    --------------------------------------------------------------------------------
+    removes the words with a particular substring from self.selected_words
+    --------------------------------------------------------------------------------
+    inputs:
+    - ss: particular substring
+    --------------------------------------------------------------------------------
+    '''
     def remove_words_with_substring(self, ss):
         self.selected_words = [word for word in self.selected_words if ss not in word]
 
+    '''
+    --------------------------------------------------------------------------------
+    returns the words beginning with a particular letter from self.selected_words
+    --------------------------------------------------------------------------------
+    inputs:
+    - l: particular letter
+    --------------------------------------------------------------------------------
+    '''
     def get_words_beginning_with_letter(self, l):
         return [word for word in self.selected_words if word[0] == l]
 
+    '''
+    --------------------------------------------------------------------------------
+    returns the words ending with a particular letter from self.selected_words
+    --------------------------------------------------------------------------------
+    inputs:
+    - l: particular letter
+    --------------------------------------------------------------------------------
+    '''
     def get_words_ending_with_letter(self, l):
         return [word for word in self.selected_words if word[-1] == l]
 
