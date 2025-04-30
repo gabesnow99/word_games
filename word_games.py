@@ -47,7 +47,6 @@ class WordListManipulator():
         if remove_symbols:
             self.selected_words = [word for word in self.selected_words if word.isalpha()]
 
-
     '''
     --------------------------------------------------------------------------------
     removes all words with a particular letter
@@ -70,13 +69,22 @@ class WordListManipulator():
     def remove_words_without_letter(self, l):
         self.selected_words = [word for word in self.selected_words if l in word]
 
+    def get_words_with_letter(self, l):
+        return [word for word in self.selected_words if l in word]
+
+    def count_unique_letters(self, word):
+        return len(set(word))
+
+    def sort_by_unique_letters(self):
+        self.selected_words = sorted(self.selected_words, key=lambda word: self.count_unique_letters(word))
+
     '''
     --------------------------------------------------------------------------------
     returns words selected by the user
     --------------------------------------------------------------------------------
     '''
     def get_selected_words(self):
-        return self.selected_words
+        return self.selected_words.copy()
 
     '''
     returns the selected_words member to the full set
@@ -123,6 +131,8 @@ class SpellingBeer(WordListManipulator):
         return words_
 
 
+''' This class is specifically useful for the game Letter Boxed.
+'''
 class LetterBoxer(WordListManipulator):
 
     '''
@@ -155,15 +165,6 @@ class LetterBoxer(WordListManipulator):
     def get_words_ending_with_letter(self, l):
         return [word for word in self.selected_words if word[-1] == l]
 
-    def sort_by_unique_letters(self):
-        self.selected_words.sort()
-
-    def count_unique_letters(self, word):
-        return len(set(word))
-
-    def sort_by_unique_letters(self):
-        self.selected_words = sorted(self.selected_words, key=lambda word: self.count_unique_letters(word))
-
 
 if __name__ == '__main__':
 
@@ -178,8 +179,12 @@ if __name__ == '__main__':
     # print(b.get_selected_words())
     # print(b.get_words_using_all_letters())
 
-    walls = [['a', 'b', 'c', 'd'], ['e', 'f', 'g', 'h'], ['i', 'j', 'k', 'l'], ['m', 'n', 'o', 'p']]
+    # walls = [['a', 'b', 'c'], ['d', 'e', 'f'], ['g', 'h', 'i'], ['j', 'k', 'l']]
+    walls = [['i', 'u', 'r'], ['w', 'h', 'n'], ['e', 'a', 'p'], ['x', 'm', 'o']]
     c = LetterBoxer(walls)
     c.sort_by_unique_letters()
-    print(c.get_words_ending_with_letter('g'))
-
+    print(c.get_words_with_letter('x'))
+    # print(c.get_words_ending_with_letter('p'))
+    print(c.get_words_ending_with_letter('e'))
+    print(c.get_words_beginning_with_letter('r'))
+    # print(c.selected_words)
