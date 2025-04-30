@@ -154,7 +154,22 @@ class LetterBoxer(WordListManipulator):
                 for l2 in wall:
                     self.remove_words_with_substring(l1 + l2)
         # set master list equal to subgroup
+        self.sort_by_unique_letters()
         self.words = self.selected_words.copy()
+        self.check_for_pair_completion()
+
+    def check_for_pair_completion(self):
+        for big_word in reversed(self.words):
+            lefts = self.get_words_ending_with_letter(big_word[0])
+            for left in lefts:
+                if self.count_unique_letters(left + big_word) == 12:
+                    print(left + " " + big_word)
+                    return
+            rights = self.get_words_beginning_with_letter(big_word[-1])
+            for right in rights:
+                if self.count_unique_letters(big_word + right) == 12:
+                    print(big_word + " " + right)
+                    return
 
     def remove_words_with_substring(self, ss):
         self.selected_words = [word for word in self.selected_words if ss not in word]
