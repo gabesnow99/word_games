@@ -179,6 +179,8 @@ class LetterBoxer(WordListManipulator):
         # set master list equal to subgroup
         self.sort_by_unique_letters()
         self.words = self.selected_words.copy()
+
+        self.two_word_solutions = []
         self.check_for_pair_completion()
 
     '''
@@ -192,13 +194,15 @@ class LetterBoxer(WordListManipulator):
             lefts = self.get_words_ending_with_letter(big_word[0])
             for left in lefts:
                 if self.count_unique_letters(left + big_word) == 12:
-                    print(left + " " + big_word)
-                    return # comment out to print all two-word combinations
+                    self.two_word_solutions.append(left + " " + big_word)
+                    # print(left + " " + big_word)
+                    # return # comment out to print all two-word combinations
             rights = self.get_words_beginning_with_letter(big_word[-1])
             for right in rights:
                 if self.count_unique_letters(big_word + right) == 12:
-                    print(big_word + " " + right)
-                    return # comment out to print all two-word combinations
+                    # print(big_word + " " + right)
+                    # return # comment out to print all two-word combinations
+                    self.two_word_solutions.append(big_word + " " + right)
 
     '''
     --------------------------------------------------------------------------------
