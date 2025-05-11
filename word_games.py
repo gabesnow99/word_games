@@ -193,13 +193,13 @@ class LetterBoxer(WordListManipulator):
         for big_word in reversed(self.words):
             lefts = self.get_words_ending_with_letter(big_word[0])
             for left in lefts:
-                if self.count_unique_letters(left + big_word) == 12:
+                if self.count_unique_letters(left + big_word) == 12 and (left + " " + big_word) not in self.two_word_solutions:
                     self.two_word_solutions.append(left + " " + big_word)
                     # print(left + " " + big_word)
                     # return # comment out to print all two-word combinations
             rights = self.get_words_beginning_with_letter(big_word[-1])
             for right in rights:
-                if self.count_unique_letters(big_word + right) == 12:
+                if self.count_unique_letters(big_word + right) == 12 and (big_word + " " + right) not in self.two_word_solutions:
                     # print(big_word + " " + right)
                     # return # comment out to print all two-word combinations
                     self.two_word_solutions.append(big_word + " " + right)

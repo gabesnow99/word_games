@@ -16,6 +16,9 @@ if __name__ == '__main__':
                     wall.append(str(letters[3*ii + jj]))
                 four_walls.append(wall)
             game = LetterBoxer(four_walls)
-            print(game.two_word_solutions[0])
+            if len(game.two_word_solutions) > 0:
+                print(game.two_word_solutions)
+            else:
+                print("No Two-Word Solutions")
         else:
             print("Incorrect Number of Letters")
