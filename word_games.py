@@ -137,11 +137,18 @@ class Wordler(WordListManipulator):
 class SpellingBeer(WordListManipulator):
 
     # TODO: CORRECT LOGIC SO IT DOESN'T SEARCH THE LIST 19 TIMES, BUT ONE TIME
-    def __init__(self, center_letter, l1, l2, l3, l4, l5, l6, filepath='/usr/share/dict/words'):
+    def __init__(self, center_letter, l1=None, l2=None, l3=None, l4=None, l5=None, l6=None, filepath='/usr/share/dict/words'):
         super().__init__(filepath)
         self.keep_words_of_length_n(4, keep_n_or_greater=True)
-        self.remove_words_without_letter(center_letter)
-        self.available_letters = [center_letter, l1, l2, l3, l4, l5, l6]
+        # TODO: ADDRESS WRONG NUMBER OF LETTERS
+        if len(center_letter) == 1:
+            self.remove_words_without_letter(center_letter)
+            self.available_letters = [center_letter, l1, l2, l3, l4, l5, l6]
+        elif len(center_letter) == 7:
+            self.remove_words_without_letter(center_letter[0])
+            self.available_letters = []
+            for l in center_letter:
+                self.available_letters.append(l)
         to_remove = [l for l in self.alphabet if l not in self.available_letters]
         for letter in to_remove:
             self.remove_words_with_letter(letter)
