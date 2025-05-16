@@ -11,5 +11,6 @@ if __name__ == '__main__':
         if len(letters) == 7:
             game = SpellingBeer(letters)
             print(game.selected_words)
+            print(game.get_words_using_all_letters())
         else:
             print("Incorrect Number of Letters")
