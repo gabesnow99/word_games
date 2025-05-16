@@ -125,6 +125,22 @@ class Wordler(WordListManipulator):
         self.keep_words_of_length_n(5)
         self.words = self.selected_words.copy()
 
+    def make_guess(self, guess, result):
+        if len(guess) != 5:
+            print("Invalid Guess")
+            return
+        if len(guess) != 5:
+            print("Invalid Guess")
+            return
+        for ii, l in enumerate(guess):
+            if result[ii] == 'g':
+                self.remove_words_without_letter_in_index(l, ii)
+            elif result[ii] == 'y':
+                self.remove_words_without_letter(l)
+                self.remove_words_with_letter_in_index(l, ii)
+            else:
+                self.remove_words_with_letter(l)
+
     def remove_words_without_letter_in_index(self, l, index):
         self.selected_words = [word for word in self.selected_words if word[index] == l]
 
