@@ -3,6 +3,7 @@ NOTE FROM THE AUTHOR: I'm tired of these games.
 TODO:
     - HANDLE UPPER/LOWER CASE
     - CHECK FOR SYMBOLS (SEE mêlée, élan, flambé, etc.)
+    - WORDLE IDEAL GUESS
 '''
 
 import numpy as np
@@ -125,27 +126,72 @@ class Wordler(WordListManipulator):
         self.keep_words_of_length_n(5)
         self.words = self.selected_words.copy()
 
+    # Primary user function
     def make_guess(self, guess, result):
         if len(guess) != 5:
             print("Invalid Guess")
             return
-        if len(guess) != 5:
+        if len(result) != 5:
             print("Invalid Guess")
             return
+        duplicates = []
+        # Iterate over guess and result
         for ii, l in enumerate(guess):
+            # Case green
             if result[ii] == 'g':
                 self.remove_words_without_letter_in_index(l, ii)
+            # Case yellow
             elif result[ii] == 'y':
                 self.remove_words_without_letter(l)
                 self.remove_words_with_letter_in_index(l, ii)
-            else:
+            # Case gray, with one instance of letter
+            elif guess.count(l) == 1:
                 self.remove_words_with_letter(l)
+            # Case gray, with duplicates
+            else:
+                self.remove_words_with_letter_in_index(l, ii)
+            # If duplicates
+            if guess.count(l) > 1:
+                if l not in duplicates:
+                    duplicates.append(l)
+        # Handle duplicate letters in a guess
+        for l in duplicates:
+            # Get indices of letter and corresponding colors
+            l_instances = [index for index, letter in enumerate(guess) if letter == l]
+            greens, yellows, grays = [], [], []
+            for instance in l_instances:
+                if result[instance] == 'g':
+                    greens.append(instance)
+                elif result[instance] == 'y':
+                    yellows.append(instance)
+                else:
+                    grays.append(instance)
+            # If all instances gray
+            if len(grays) == len(l_instances):
+                self.remove_words_with_letter(l)
+            # If at least one gray
+            elif len(grays) > 0:
+                desired_instances = len(greens) + len(yellows)
+                self.remove_words_without_n_instances_of_letter(l, desired_instances)
+            # If at least one yellow
+            elif len(yellows) > 0:
+                desired_instances = len(greens) + len(yellows)
+                self.remove_words_without_n_instances_of_letter(l, desired_instances, n_or_greater=True)
+            # If all green (unnecessary, but here for clarity)
+            else:
+                pass
 
     def remove_words_without_letter_in_index(self, l, index):
         self.selected_words = [word for word in self.selected_words if word[index] == l]
 
     def remove_words_with_letter_in_index(self, l, index):
         self.selected_words = [word for word in self.selected_words if not word[index] == l]
+
+    def remove_words_without_n_instances_of_letter(self, l, n, n_or_greater=False):
+        if n_or_greater:
+            self.selected_words = [word for word in self.selected_words if word.count(l) >= n]
+        else:
+            self.selected_words = [word for word in self.selected_words if word.count(l) == n]
 
 
 ''' This class is specifically useful for the game Spelling Bee.
